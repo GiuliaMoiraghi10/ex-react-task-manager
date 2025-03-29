@@ -3,3 +3,46 @@
 html {
     font-family: "Poppins", sans-serif;
 }
+
+td.todo {
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+td.doing {
+    background-color: rgba(255, 255, 0, 0.5);
+}
+
+td.done {
+    background-color: rgba(0, 128, 0, 0.5);
+}
+
+table {
+    width: 70%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 16px;
+    color: #333333;
+}
+
+/* Intestazione della tabella */
+th {
+    background-color: #f88dd8;
+    color: white;
+    text-align: center;
+}
+
+/* Hover su ogni riga */
+tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
