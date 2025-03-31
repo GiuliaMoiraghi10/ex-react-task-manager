@@ -10,7 +10,7 @@ export default function TaskList() {
 
     return (
         <>
-            <h2 className="font-semibold text-xl text-center mb-6 mt-10">Elenco Task</h2>
+            <h2 className="font-semibold text-xl text-center mb-6 mt-10">Lista Task</h2>
             <div className="flex justify-center">
                 <table>
                     <thead>
