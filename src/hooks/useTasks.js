@@ -15,8 +15,19 @@ export default function useTasks() {
     }, [])
 
     // creo funzioni addTask, removeTask, updateTask
-    const addTask = () => {
 
+    // addTask - aggiunge una nuova task alla lista
+    // la funzione prende in input un oggetto newTask e lo invia al server
+    const addTask = async newTask => {
+        const response = await fetch(`${VITE_API_URL}/tasks`, { // oltre a fetch passo un oggetto di configurazione
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newTask) // converto l'oggetto in stringa
+        })
+
+        const { success, message, task } = await response.json() // destrutturo la risposta in success, message e task
+        if (!success) throw new Error(message) // se non va a buon fine lancia errore
+        setTasks(prevTasks => [...prevTasks, task]) // aggiorna lo stato delle tasks
     }
 
     const removeTask = () => {

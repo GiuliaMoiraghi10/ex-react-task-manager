@@ -1,9 +1,13 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useContext } from 'react'
+import { GlobalContext } from '../context/GlobalContext'
 
 // variabile con caratteri vietati per il titolo
 const symbols = '"!@#$%^&*()-_=+[]{}|;:/,.<>?/`~"'
 
 export default function AddTask() {
+
+    // prenso la funzione addTask dal GlobalContext
+    const { addTask } = useContext(GlobalContext)
 
     // creo variabili per input controllati e input non controllati
     const [taskTitle, setTaskTitle] = useState('')
@@ -22,7 +26,7 @@ export default function AddTask() {
     }, [taskTitle])
 
     // handleSubmit x evitare refresh del form
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault()
 
         // variabile per aggiungere nuova task dal form
@@ -33,7 +37,17 @@ export default function AddTask() {
         }
 
         // stampo in console la nuova task
-        console.log('Nuova Task da aggiungere:', newTask)
+        // console.log('Nuova Task da aggiungere:', newTask)
+
+        try {
+            await addTask(newTask)
+            alert('Task aggiunta con successo!')
+            setTaskTitle('') // resetto titolo della task
+            descriptionRef.current.value = '' // resetto input non controllati
+            statusRef.current.value = ''
+        } catch (error) {
+            alert("Errore durante l'aggiunta della task", error.message)
+        }
     }
 
     return (
