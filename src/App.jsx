@@ -4,6 +4,7 @@ import BlankLayout from './layout/BlankLayout'
 import TaskList from "./pages/TaskList"
 import AddTask from "./pages/AddTask"
 import NotFound from "./pages/NotFound"
+import TaskDetails from "./pages/TaskDetails"
 import { GlobalProvider } from "./context/GlobalContext"
 
 
@@ -18,6 +19,7 @@ function App() {
               <Route path="/" element={<Navigate to='/tasks' replace />} />
               <Route path="/tasks" element={<TaskList />} />
               <Route path="/add-task" element={<AddTask />} />
+              <Route path="/tasks/:id" element={<TaskDetails />}></Route>
             </Route>
             <Route element={<BlankLayout />}>
               <Route path="*" element={<NotFound />} />
