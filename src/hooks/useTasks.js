@@ -30,8 +30,14 @@ export default function useTasks() {
         setTasks(prevTasks => [...prevTasks, task]) // aggiorna lo stato delle tasks
     }
 
-    const removeTask = () => {
+    const removeTask = async taskId => {
+        const response = await fetch(`${VITE_API_URL}/tasks/${taskId}`, {
+            method: 'DELETE'
+        })
 
+        const { success, message } = await response.json()
+        if (!success) throw new Error(message)
+        setTasks(prev => prev.filter(task => task.id !== taskId)) // filtro le task in cui non ci sarà più quella che ho eliminato
     }
 
     const updateTask = () => {

@@ -1,10 +1,13 @@
 import { useState, useRef, useMemo, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 // variabile con caratteri vietati per il titolo
 const symbols = '"!@#$%^&*()-_=+[]{}|;:/,.<>?/`~"'
 
 export default function AddTask() {
+
+    const navigate = useNavigate()
 
     // prenso la funzione addTask dal GlobalContext
     const { addTask } = useContext(GlobalContext)
@@ -42,6 +45,7 @@ export default function AddTask() {
         try {
             await addTask(newTask)
             alert('Task aggiunta con successo!')
+            navigate('/tasks')
             setTaskTitle('') // resetto titolo della task
             descriptionRef.current.value = '' // resetto input non controllati
             statusRef.current.value = ''

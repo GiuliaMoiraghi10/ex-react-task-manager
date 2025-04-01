@@ -1,16 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../context/GlobalContext";
+import { Navigate } from "react-router-dom";
 
 export default function TaskDetails() {
     // raccolgo gli id con useParams()
     const { id } = useParams()
 
     // prendo tutte le tasks da GlobalContext
-    const { tasks } = useContext(GlobalContext)
+    const { tasks, removeTask } = useContext(GlobalContext)
 
     // prendo task singola tramite id preso graxie a useParams
     const task = tasks.find(task => task.id === parseInt(id)) // trasformo stringa in numero
+
+    const navigate = useNavigate()
 
     // se non trovo la task tramite id (query utente), mi ritorna errore
     if (!task) {
@@ -20,8 +23,16 @@ export default function TaskDetails() {
     }
 
     // funzione bottone
-    const handleTaskDelete = () => {
-        console.log('Elimina task con id:', task.id)
+    const handleTaskDelete = async () => {
+        // console.log('Elimina task con id:', task.id)
+        try {
+            await removeTask(task.id)
+            alert('Task eliminata!')
+            navigate('/tasks')
+        } catch (error) {
+            console.error(error)
+            alert(error.message)
+        }
     }
 
 
