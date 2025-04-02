@@ -42,6 +42,13 @@ th {
 }
 
 /* Hover su ogni riga */
+
+th:hover {
+    background-color: #f77bc1;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 tr:hover {
     background-color: #f1f1f1;
     cursor: pointer;
