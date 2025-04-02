@@ -4,6 +4,7 @@ export default function Modal({ title, content, show, onClose, onConfirm, confir
 
     if (!show) return null
 
+    // con createPortal rendo la modale indipendente dal flusso di rendering
     return createPortal(
         <div className='modal-overlay'>
             <div className='modal'>

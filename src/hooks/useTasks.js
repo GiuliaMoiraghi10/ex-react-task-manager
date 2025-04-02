@@ -40,8 +40,17 @@ export default function useTasks() {
         setTasks(prev => prev.filter(task => task.id !== taskId)) // filtro le task in cui non ci sarà più quella che ho eliminato
     }
 
-    const updateTask = () => {
+    const updateTask = async updatedTask => {
+        const response = await fetch(`${VITE_API_URL}/tasks/${updatedTask.id}`, { // oltre a fetch passo un oggetto di configurazione
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedTask) // converto l'oggetto in stringa
+        })
 
+        const { success, message, task: newTask } = await response.json() // destrutturo la risposta in success, message e task
+        if (!success) throw new Error(message) // se non va a buon fine lancia errore
+        setTasks(prevTask => prevTask.map( // modifico task precedente con map in cui tutte le task restano uguali, tranne quella modificata che sarà una nuova task
+            oldTask => oldTask.id === newTask.id ? newTask : oldTask)) // se id della oldTask è l'id nella newTask, ritorna la newTask, altrimenti ritorna la oldTask
     }
 
     return { tasks, addTask, removeTask, updateTask } // mi ritorna la lista delle tasks

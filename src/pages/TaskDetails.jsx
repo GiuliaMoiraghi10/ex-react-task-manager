@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import Modal from '../components/Modal'
+import EditTaskModal from "../components/EditTaskModal";
 
 
 export default function TaskDetails() {
@@ -9,15 +10,16 @@ export default function TaskDetails() {
     const { id } = useParams()
 
     // prendo tutte le tasks da GlobalContext
-    const { tasks, removeTask } = useContext(GlobalContext)
+    const { tasks, removeTask, updateTask } = useContext(GlobalContext)
 
     // prendo task singola tramite id preso graxie a useParams
     const task = tasks.find(task => task.id === parseInt(id)) // trasformo stringa in numero
 
     const navigate = useNavigate()
 
-    // variabile per modale
+    // variabile per modale - inizialmente false perchè non si vede
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
 
     // se non trovo la task tramite id (query utente), mi ritorna errore
     if (!task) {
@@ -26,12 +28,24 @@ export default function TaskDetails() {
         )
     }
 
-    // funzione bottone
+    // funzione bottoni x eliminare e modificare
     const handleTaskDelete = async () => {
         // console.log('Elimina task con id:', task.id)
         try {
             await removeTask(task.id)
             alert('Task eliminata!')
+            navigate('/tasks')
+        } catch (error) {
+            console.error(error)
+            alert(error.message)
+        }
+    }
+
+    const handleTaskUpdate = async updatedTask => {
+        try {
+            await updateTask(updatedTask)
+            setShowEditModal(false)
+            alert('Task modificata!')
             navigate('/tasks')
         } catch (error) {
             console.error(error)
@@ -49,6 +63,8 @@ export default function TaskDetails() {
                 <p className="mb-5"><strong className="text-pink-300">Stato:</strong> {task.status} </p>
                 <p className="mb-5"><strong className="text-pink-300">Data creazione:</strong> {new Date(task.createdAt).toLocaleDateString()} </p>
                 <button onClick={() => setShowDeleteModal(true)}>Elimina Task</button>
+                <button onClick={() => setShowEditModal(true)}>Modifica Task</button>
+
 
                 {/* Modale di eliminazione */}
                 <Modal
@@ -58,6 +74,14 @@ export default function TaskDetails() {
                     onClose={() => setShowDeleteModal(false)}
                     onConfirm={handleTaskDelete}
                     confirmText="Elimina"
+                />
+
+                {/* Modale di modifica task */}
+                <EditTaskModal
+                    task={task}
+                    show={showEditModal}
+                    onClose={() => setShowEditModal(false)}
+                    onSave={handleTaskUpdate}
                 />
             </div>
         </>
