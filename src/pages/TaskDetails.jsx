@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
-import { Navigate } from "react-router-dom";
+import Modal from '../components/Modal'
+
 
 export default function TaskDetails() {
     // raccolgo gli id con useParams()
@@ -14,6 +15,9 @@ export default function TaskDetails() {
     const task = tasks.find(task => task.id === parseInt(id)) // trasformo stringa in numero
 
     const navigate = useNavigate()
+
+    // variabile per modale
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     // se non trovo la task tramite id (query utente), mi ritorna errore
     if (!task) {
@@ -44,7 +48,17 @@ export default function TaskDetails() {
                 <p className="mb-5"><strong className="text-pink-300">Descrizione:</strong> {task.description} </p>
                 <p className="mb-5"><strong className="text-pink-300">Stato:</strong> {task.status} </p>
                 <p className="mb-5"><strong className="text-pink-300">Data creazione:</strong> {new Date(task.createdAt).toLocaleDateString()} </p>
-                <button onClick={handleTaskDelete}>Elimina Task</button>
+                <button onClick={() => setShowDeleteModal(true)}>Elimina Task</button>
+
+                {/* Modale di eliminazione */}
+                <Modal
+                    title='Conferma eliminazione'
+                    content={<p>Elimini la task?</p>}
+                    show={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={handleTaskDelete}
+                    confirmText="Elimina"
+                />
             </div>
         </>
     )
