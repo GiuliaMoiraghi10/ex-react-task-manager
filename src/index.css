@@ -168,3 +168,7 @@ button {
 .modal button:hover {
     background-color: #f77bc1;
 }
+
+input.search {
+    width: 70%;
+}
