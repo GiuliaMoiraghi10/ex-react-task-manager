@@ -1,6 +1,17 @@
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState, useMemo, useCallback } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
 import TaskRow from '../components/TaskRow'
+
+// funzione di debounce
+function debounce(callback, delay) {
+    let timer
+    return (value) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            callback(value)
+        }, delay)
+    }
+}
 
 export default function TaskList() {
 
@@ -17,6 +28,9 @@ export default function TaskList() {
 
     // variabile di stato per ricerca task
     const [searchQuery, setSearchQuery] = useState('')
+
+    // variabile per debounceSearch
+    const debounceSearch = useCallback(debounce(setSearchQuery, 500), [])
 
     // funzione che prende campo e controlla se sortBy è uguale a stringa
     // se clicco sulla stessa colonna vado a fare un setSortOrder
@@ -64,8 +78,7 @@ export default function TaskList() {
                     className='search'
                     type="text"
                     placeholder='Cerca una Task'
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
+                    onChange={e => debounceSearch(e.target.value)}
                 />
             </div>
             <div className="flex justify-center">
